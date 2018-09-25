@@ -2,6 +2,12 @@ class Property < ApplicationRecord
   belongs_to :agent
   has_one :address
 
+  def self.by_city(city)
+    select('properties.id, price, beds, baths, sq_ft')
+    .join('INNER JOIN addresses a ON a.prperty_id = prperties.id')
+    .where('LOWER(a.city) = ? AND prperties.sold <> TRUE', city.downcase)
+  end
+
   #Property.available
   def self.available
     #property id, price, beds, baths, sq_ft, city zip street, agent first_name, agent last name, agent email, agent id
